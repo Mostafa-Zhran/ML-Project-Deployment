@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ML Model Prediction Interface</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">        
 </head>
-response
 
 <body>
     <div class="container">
@@ -65,8 +64,7 @@ response
                         </div>
                         <div class="input-group">
                             <label for="concave_points_mean">Concave Points Mean</label>
-                            <input type="number" id="concave_points_mean" name="concave_points_mean" step="any"
-                                required>
+                            <input type="number" id="concave_points_mean" name="concave_points_mean" step="any" required>
                         </div>
                         <div class="input-group">
                             <label for="symmetry_mean">Symmetry Mean</label>
@@ -74,8 +72,7 @@ response
                         </div>
                         <div class="input-group">
                             <label for="fractal_dimension_mean">Fractal Dim. Mean</label>
-                            <input type="number" id="fractal_dimension_mean" name="fractal_dimension_mean" step="any"
-                                required>
+                            <input type="number" id="fractal_dimension_mean" name="fractal_dimension_mean" step="any" required>
                         </div>
 
                         <!-- SE (Standard Error) Features Section -->
@@ -118,8 +115,7 @@ response
                         </div>
                         <div class="input-group">
                             <label for="fractal_dimension_se">Fractal Dim. SE</label>
-                            <input type="number" id="fractal_dimension_se" name="fractal_dimension_se" step="any"
-                                required>
+                            <input type="number" id="fractal_dimension_se" name="fractal_dimension_se" step="any" required>
                         </div>
 
                         <!-- Worst Features Section -->
@@ -154,8 +150,7 @@ response
                         </div>
                         <div class="input-group">
                             <label for="concave_points_worst">Concave Points Worst</label>
-                            <input type="number" id="concave_points_worst" name="concave_points_worst" step="any"
-                                required>
+                            <input type="number" id="concave_points_worst" name="concave_points_worst" step="any" required>
                         </div>
                         <div class="input-group">
                             <label for="symmetry_worst">Symmetry Worst</label>
@@ -163,8 +158,7 @@ response
                         </div>
                         <div class="input-group">
                             <label for="fractal_dimension_worst">Fractal Dim. Worst</label>
-                            <input type="number" id="fractal_dimension_worst" name="fractal_dimension_worst" step="any"
-                                required>
+                            <input type="number" id="fractal_dimension_worst" name="fractal_dimension_worst" step="any" required>
                         </div>
                     </div>
 
@@ -249,7 +243,7 @@ response
                 concave_points_mean: 0.0578,
                 symmetry_mean: 0.1885,
                 fractal_dimension_mean: 0.05766,
-
+                
                 // SE (Standard Error) features
                 radius_se: 0.2699,
                 texture_se: 0.7886,
@@ -261,7 +255,7 @@ response
                 concave_points_se: 0.0121,
                 symmetry_se: 0.0249,
                 fractal_dimension_se: 0.0045,
-
+                
                 // Worst features
                 radius_worst: 15.11,
                 texture_worst: 19.26,
@@ -286,7 +280,7 @@ response
                 concave_points_mean: 0.1471,
                 symmetry_mean: 0.2419,
                 fractal_dimension_mean: 0.07871,
-
+                
                 // SE (Standard Error) features
                 radius_se: 1.095,
                 texture_se: 0.9053,
@@ -298,7 +292,7 @@ response
                 concave_points_se: 0.01587,
                 symmetry_se: 0.03003,
                 fractal_dimension_se: 0.006193,
-
+                
                 // Worst features
                 radius_worst: 25.38,
                 texture_worst: 17.33,
@@ -338,7 +332,7 @@ response
 
             // Get all input elements
             const inputs = document.querySelectorAll('input[type="number"]');
-
+            
             // Populate each input field with sample data
             inputs.forEach(input => {
                 const fieldName = input.id;
@@ -348,11 +342,11 @@ response
             });
 
             // Show success message
-            const message = type === 'benign'
-                ? 'Benign sample data loaded successfully!'
+            const message = type === 'benign' 
+                ? 'Benign sample data loaded successfully!' 
                 : 'Malignant sample data loaded successfully!';
             showMessage(message, 'success');
-
+            
             // Scroll to the top of the form for better UX
             document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
         }
@@ -441,14 +435,14 @@ response
                 const originalBtnText = submitBtn.innerHTML;
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '🔮 Predicting...';
-
+                
                 try {
                     // Make prediction with real backend
                     let response;
                     try {
-                        response = await fetch("/predihttps://29c2b339-9b8b-4906-ba1b-32dc1d0cecec-00-10meg8pszbumb.janeway.replit.dev/ct", {
+                        response = await fetch("/predict", {
                             method: "POST",
-                            headers: {
+                            headers: { 
                                 "Content-Type": "application/json",
                                 "Accept": "application/json"
                             },
@@ -461,7 +455,7 @@ response
                         }
                         throw new Error('Network error. Please check your connection and try again.');
                     }
-
+                    
                     // Parse JSON response
                     let result;
                     try {
@@ -469,34 +463,34 @@ response
                     } catch (error) {
                         throw new Error('Invalid response from server');
                     }
-
+                    
                     if (!response.ok) {
                         const errorMsg = result.error || result.message || `HTTP error! status: ${response.status}`;
                         throw new Error(errorMsg);
                     }
-
+                    
                     // Validate response structure
-                    if (result.prediction === undefined || result.confidence === undefined ||
+                    if (result.prediction === undefined || result.confidence === undefined || 
                         result.probabilities === undefined) {
                         console.error('Invalid response structure:', result);
                         throw new Error('Invalid response format from server');
                     }
-
+                    
                     // Ensure prediction is a number (0 or 1)
                     const prediction = parseInt(result.prediction);
                     if (isNaN(prediction) || (prediction !== 0 && prediction !== 1)) {
                         console.error('Invalid prediction value:', result.prediction);
                         throw new Error('Invalid prediction result');
                     }
-
+                    
                     // Display the results with the validated prediction
                     displayResults({
                         ...result,
                         prediction: prediction // Ensure prediction is a number
                     });
-
+                    
                     showMessage('Prediction completed successfully!', 'success');
-
+                    
                 } catch (error) {
                     console.error('Prediction error:', error);
                     showMessage(error.message || 'An error occurred while making the prediction', 'error');
@@ -520,7 +514,7 @@ response
                 'resultsContainer', 'predictionValue', 'predictionDescription',
                 'confidenceSection', 'confidenceFill', 'confidenceText'
             ];
-
+            
             for (const id of requiredElements) {
                 if (!document.getElementById(id)) {
                     console.error(`Missing required element with id: ${id}`);
@@ -560,21 +554,21 @@ response
             }
 
             confidenceText.textContent = `Model confidence: ${confidencePercentage}% - ${confidencePercentage >= 80 ? 'High confidence' :
-                confidencePercentage >= 60 ? 'Moderate confidence' : 'Low confidence'
+                    confidencePercentage >= 60 ? 'Moderate confidence' : 'Low confidence'
                 }`;
 
             // Show results with animation
             confidenceSection.style.display = 'block';
             resultsContainer.style.display = 'block';
-
+            
             // Force reflow to ensure transition works
             void resultsContainer.offsetWidth;
-
+            
             // Animate results appearance
             resultsContainer.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
             resultsContainer.style.opacity = '1';
             resultsContainer.style.transform = 'translateY(0)';
-
+            
             // Smooth scroll to results
             resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }

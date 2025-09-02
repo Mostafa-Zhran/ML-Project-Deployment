@@ -148,10 +148,10 @@ def serve_file(filename):
     return send_from_directory(os.path.dirname(os.path.abspath(__file__)), filename)
 
 if __name__ == "__main__":
-    # For development
-    if os.environ.get('FLASK_ENV') == 'development':
-        app.run(debug=True, host='0.0.0.0', port=5000)
-    else:
+
+   if os.environ.get('FLASK_ENV') == 'development':
+        app.run(debug=True, host='localhost', port=5000)
+   else:
         # For production
-        print("Starting production server on http://0.0.0.0:8080")
-        serve(app, host='0.0.0.0', port=8080, threads=4, url_scheme='http')
+        print("Starting production server on http://localhost:8080")
+        serve(app, host='localhost', port=8080, threads=4, url_scheme='http')
